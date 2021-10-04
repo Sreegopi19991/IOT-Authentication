@@ -1,0 +1,247 @@
+ usertype Timestamp;
+
+const XOR:Function;
+
+const ID;
+
+hashfunction H;
+
+const HASH: Function;
+
+const Fresh:Function;
+
+const CONCAT: Function;
+
+secret ScalarMultiply : Function ;
+
+secret PointAddition:Function;
+
+secret PointSubtraction:Function;
+
+const  G;
+
+
+
+        
+
+protocol Authentication(S,B,P){
+
+ role S{
+
+        const IDs;
+
+        const vids;
+
+        const Ss,Sb;
+
+	fresh N1: Nonce;
+
+        const PWs;
+
+        fresh T1: Timestamp;
+
+        var N3,N2;
+
+        var I4,I20;
+
+        macro i1=H(CONCAT(IDs,PWs));
+
+        macro i2=XOR(H(CONCAT(IDs,PWs)),N1);
+
+        send_1(S,B,i2,T1);
+
+        recv_2(B,S,I4);
+
+        macro i9=ScalarMultiply(N1,G);
+
+        macro i10=XOR(N1,IDs);
+
+        macro i11=H(CONCAT(vids,N1));
+
+        send_5(S,B,i9,XOR(N1,IDs),i11);
+
+        recv_9(B,S,I20,XOR(N3,Ss),XOR(N2,XOR(XOR(H(CONCAT(IDs,PWs)),N1),H(CONCAT(IDs,Sb)))));
+
+        macro sk=H(XOR(N1,(CONCAT(N2,N3))));
+
+        claim_s1(S,Secret,Ss);
+
+        claim_s2(S,Secret,IDs);
+
+        claim_s3(S,Secret,PWs);
+
+        claim_s4(S,Secret,T1);
+
+        claim_s5(S,Secret,sk);
+
+        claim_s6(S,Niagree);
+
+        claim_s7(S,Nisynch);
+
+        
+
+       
+
+            
+
+         
+
+
+
+}
+
+role B{
+
+                  const IDs,IDp;
+
+                  const vids,vidp;
+
+                  const Ss,Sb,Sp;
+
+
+
+        const PWs;
+
+        fresh N2: Nonce;
+
+        fresh T2: Timestamp;
+
+        fresh Tb:Timestamp;
+
+        var T1:Timestamp;
+
+        var T3:Timestamp;
+
+        var N1,N3;
+
+        var I2,I6,I9,I11,I16,I15,i12',i';
+
+        recv_1(S,B,I2,T1);
+
+        macro i3=H(CONCAT(IDs,Sb));
+
+        macro i4= XOR(I2,H(CONCAT(IDs,Sb)));
+
+        send_2(B,S,i4);
+
+        recv_3(P,B,I6,T3);
+
+        macro i7=H(CONCAT(IDp,Sb));
+
+        macro i8=XOR(I6,H(CONCAT(IDp,Sb)));
+
+        send_4(B,P,i8);
+
+        recv_5(S,B,I9,XOR(N1,IDs),I11);
+
+        macro i12=ScalarMultiply(G,N2);
+
+        macro i=ScalarMultiply(G,Sp);
+
+        macro i14=XOR(N1,Sp);
+
+        send_6(B,P,i12,XOR(N1,Sp));
+
+        recv_7(P,B,I15,H(CONCAT(ScalarMultiply(vidp,PointAddition(i12',i')),T3,N3)),XOR(N3,IDp));   
+
+        macro i18=ScalarMultiply(ScalarMultiply(N3,G),PointAddition(Sb,Sp));
+
+        macro i19=XOR(N2,XOR(XOR(H(vidp),N3),H(CONCAT(IDp,Sb))));
+
+        send_8(B,P,i18,XOR(N2,XOR(XOR(H(vidp),N3),H(CONCAT(IDp,Sb)))));
+
+        macro i20=CONCAT(ScalarMultiply(N1,G,Ss),N2);
+
+        macro i21=XOR(N3,Ss);
+
+        macro i22=XOR(N2,c4);
+
+        macro sk=H(XOR(N1,(CONCAT(N2,N3))));
+
+        send_9(B,S,i20,XOR(N3,Ss),XOR(N2,XOR(XOR(H(CONCAT(IDs,PWs)),N1),H(CONCAT(IDs,Sb)))));
+
+        claim_b1(B,Secret,Ss);
+
+        claim_b2(B,Secret,Sp);
+
+        claim_b3(B,Secret,Sb);
+
+        claim_b4(B,Secret,T2);
+
+        claim_b5(B,Secret,sk);
+
+        claim_b7(B,Niagree);
+
+        claim_b8(B,Nisynch);
+
+       
+
+       
+
+       
+
+}
+
+role P{
+
+         const IDp;
+
+         const vidp;
+
+	const Ss,Sb,Sp;
+
+	fresh N3: Nonce;
+
+        fresh T3: Timestamp;
+
+        fresh T4: Timestamp;
+
+        var N1,N2;
+
+        var I8,I12,I18,I19;
+
+        macro i5=H(vidp);
+
+        macro i6=XOR(H(vidp),N3);
+
+        send_3(P,B,i6,T3);
+
+        recv_4(B,P,I8);
+
+        recv_6(B,P,I12,XOR(N1,Sp));
+
+        macro i15=ScalarMultiply(N3,G);
+
+        macro I=ScalarMultiply(G,Sp);
+
+        macro i16=H(CONCAT(ScalarMultiply(vidp,PointAddition(I12,I)),T3,N3));
+
+        macro i17=XOR(N3,IDp);
+
+        send_7(P,B,i15,H(CONCAT(ScalarMultiply(vidp,PointAddition(I12,I)),T3,N3)),XOR(N3,IDp));
+
+        recv_8(B,P,i18,XOR(N2,XOR(XOR(H(vidp),N3),H(CONCAT(IDp,Sb)))));
+
+        macro sk=H(XOR(N1,(CONCAT(N2,N3))));
+
+        claim_p1(P,Secret,Sp);
+
+        claim_p2(P,Secret,Sb);
+
+        claim_p3(P,Secret,IDp);
+
+        claim_p4(P,Secret,T3);
+
+        claim_p5(P,Secret,sk);
+
+        claim_p6(P,Niagree);
+
+        claim_p7(P,Nisynch);
+
+       
+
+
+
+}
+
+}
